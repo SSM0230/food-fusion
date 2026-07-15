@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Food Fusion — India's most premium food delivery experience. Discover restaurants, earn loyalty rewards, and enjoy lightning-fast delivery.">
+    <title>Food Fusion — Premium Food Delivery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --amber: #f59e0b;
+            --indigo: #6366f1;
+            --emerald: #10b981;
+            --rose: #f43f5e;
+            --dark: #0f1016;
+            --card: rgba(22, 24, 37, 0.85);
+            --border: rgba(255,255,255,0.08);
+            --muted: #9ca3af;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark);
+            color: #f3f4f6;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(99,102,241,0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(245,158,11,0.06) 0%, transparent 45%);
+        }
+
+        /* ─── NAVBAR ─── */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 6%;
+            height: 72px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 16, 22, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f59e0b, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo i { -webkit-text-fill-color: #f59e0b; }
+
+        .nav-cta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.25s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: #f3f4f6;
+        }
+
+        .btn-outline:hover { border-color: var(--amber); color: var(--amber); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f1016;
+            box-shadow: 0 4px 20px rgba(245,158,11,0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(245,158,11,0.45);
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            padding: 80px 6% 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
+            bottom: -80px;
+            left: 10%;
+            pointer-events: none;
+        }
+
+        .hero-content { max-width: 620px; z-index: 1; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99,102,241,0.12);
+            border: 1px solid rgba(99,102,241,0.3);
+            padding: 7px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #a5b4fc;
+            margin-bottom: 28px;
+            animation: slideDown 0.6s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 6vw, 72px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            margin-bottom: 22px;
+            animation: slideUp 0.7s ease;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 38px;
+            max-width: 500px;
+            animation: slideUp 0.8s ease;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            animation: slideUp 0.9s ease;
+        }
+
+        .btn-large { padding: 15px 32px; font-size: 16px; border-radius: 14px; }
+
+        .hero-floater {
+            position: absolute;
+            right: 6%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            z-index: 1;
+            animation: floatIn 1s ease;
+        }
+
+        @media (max-width: 900px) { .hero-floater { display: none; } }
+
+        .float-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            text-align: center;
+            min-width: 150px;
+            transition: transform 0.3s ease;
+        }
+
+        .float-card:hover { transform: translateY(-6px); }
+
+        .float-card .icon { font-size: 36px; margin-bottom: 10px; }
+        .float-card .label { font-size: 12px; color: var(--muted); }
+        .float-card .value { font-size: 20px; font-weight: 800; color: #fff; margin: 4px 0; }
+
+        /* ─── STATS ─── */
+        .stats-bar {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 36px 6%;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f59e0b, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .stat-label { font-size: 14px; color: var(--muted); margin-top: 6px; font-weight: 500; }
+
+        /* ─── SECTIONS ─── */
+        section { padding: 100px 6%; }
+
+        .section-tag {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 4vw, 50px);
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .section-subtitle {
+            font-size: 17px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 520px;
+            margin-bottom: 60px;
+        }
+
+        /* ─── FEATURES ─── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 28px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--glow-color, rgba(245,158,11,0)), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .feature-card:hover::before { opacity: 1; }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+        .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+        /* ─── CUISINES ─── */
+        .cuisines-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            scrollbar-width: none;
+        }
+
+        .cuisines-scroll::-webkit-scrollbar { display: none; }
+
+        .cuisine-pill {
+            flex-shrink: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 12px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: default;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .cuisine-pill:hover { border-color: var(--amber); color: var(--amber); transform: scale(1.04); }
+        .cuisine-pill span { font-size: 22px; }
+
+        /* ─── HOW IT WORKS ─── */
+        .steps-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .step-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f1016;
+            font-weight: 900;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 16px rgba(245,158,11,0.4);
+        }
+
+        .step-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+        .step-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        /* ─── TESTIMONIALS ─── */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .stars { color: var(--amber); font-size: 15px; margin-bottom: 14px; }
+        .testimonial-text { font-size: 15px; color: #e5e7eb; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .reviewer-name { font-weight: 700; font-size: 14px; }
+        .reviewer-role { font-size: 12px; color: var(--muted); }
+
+        /* ─── CTA BANNER ─── */
+        .cta-section {
+            margin: 0 6% 100px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #1c1917 50%, #1a0a00 100%);
+            border: 1px solid rgba(245,158,11,0.15);
+            padding: 80px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .cta-section h2 { font-size: clamp(28px, 4vw, 50px); font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+        .cta-section p { font-size: 17px; color: var(--muted); max-width: 480px; margin: 0 auto 36px; line-height: 1.7; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: rgba(15,16,22,0.95);
+            border-top: 1px solid var(--border);
+            padding: 50px 6% 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+        .footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-top: 12px; max-width: 260px; }
+
+        .footer-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: #fff; }
+        .footer-col a {
+            display: block;
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+            cursor: default;
+        }
+        .footer-col a:hover { color: var(--amber); }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideUp   { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes floatIn   { from { opacity:0; transform:translateY(-50%) translateX(40px); } to { opacity:1; transform:translateY(-50%) translateX(0); } }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(245,158,11,0); }
+        }
+
+        .pulse { animation: pulse-glow 2.5s infinite; }
+
+        /* Floating food emojis bg */
+        .food-bg-emoji {
+            position: fixed;
+            font-size: 2.5rem;
+            opacity: 0.03;
+            pointer-events: none;
+            animation: floatEmoji linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatEmoji {
+            from { transform: translateY(110vh) rotate(0deg); }
+            to   { transform: translateY(-10vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient floating food emojis -->
+    <div class="food-bg-emoji" style="left:5%;  animation-duration:18s; animation-delay:0s;"><i class="fa-solid fa-pizza-slice"></i></div>
+    <div class="food-bg-emoji" style="left:15%; animation-duration:22s; animation-delay:3s;"><i class="fa-solid fa-burger"></i></div>
+    <div class="food-bg-emoji" style="left:30%; animation-duration:16s; animation-delay:6s;">🍣</div>
+    <div class="food-bg-emoji" style="left:55%; animation-duration:20s; animation-delay:1s;"><i class="fa-solid fa-burger"></i></div>
+    <div class="food-bg-emoji" style="left:70%; animation-duration:24s; animation-delay:4s;"><i class="fa-solid fa-bowl-food"></i></div>
+    <div class="food-bg-emoji" style="left:85%; animation-duration:17s; animation-delay:8s;"><i class="fa-solid fa-ice-cream"></i></div>
+
+    <!-- ═══════ NAVBAR ═══════ -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-utensils"></i>
+            Food Fusion
+        </div>
+        <div class="nav-cta">
+            <a href="/app" class="btn btn-outline">Sign In</a>
+            <a href="/app#/register" class="btn btn-primary pulse">
+                <i class="fa-solid fa-rocket"></i> Get Started Free
+            </a>
+        </div>
+    </nav>
+
+    <!-- ═══════ HERO ═══════ -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-circle-check"></i>
+                Trusted by 50,000+ food lovers across India
+            </div>
+            <h1>
+                Crave It.<br>
+                Order It.<br>
+                <span class="gradient-text">Love It.</span>
+            </h1>
+            <p>Food Fusion is India's most premium food delivery experience. Discover 75+ restaurants, earn loyalty rewards, track deliveries live, and enjoy every bite — delivered to your door.</p>
+            <div class="hero-actions">
+                <a href="/app" class="btn btn-primary btn-large">
+                    <i class="fa-solid fa-utensils"></i> Order Food Now
+                </a>
+                <a href="#features" class="btn btn-outline btn-large">
+                    <i class="fa-solid fa-play-circle"></i> See Features
+                </a>
+            </div>
+        </div>
+
+        <!-- Floating Stats Cards -->
+        <div class="hero-floater">
+            <div class="float-card" style="margin-top:40px;">
+                <div class="icon"><i class="fa-solid fa-motorcycle"></i></div>
+                <div class="value">25 min</div>
+                <div class="label">Avg. Delivery</div>
+            </div>
+            <div class="float-card">
+                <div class="icon"><i class="fa-solid fa-utensils"></i></div>
+                <div class="value">1,200+</div>
+                <div class="label">Dishes Available</div>
+            </div>
+            <div class="float-card">
+                <div class="icon">⭐</div>
+                <div class="value">4.8 / 5</div>
+                <div class="label">Avg. Rating</div>
+            </div>
+            <div class="float-card" style="margin-top:40px;">
+                <div class="icon"><i class="fa-solid fa-gift"></i></div>
+                <div class="value">Rewards</div>
+                <div class="label">Every Order</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ STATS BAR ═══════ -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-num">75+</div>
+            <div class="stat-label">Restaurants</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">1,200+</div>
+            <div class="stat-label">Menu Items</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">50K+</div>
+            <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">25 min</div>
+            <div class="stat-label">Average Delivery</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">4.8★</div>
+            <div class="stat-label">Platform Rating</div>
+        </div>
+    </div>
+
+    <!-- ═══════ FEATURES ═══════ -->
+    <section id="features">
+        <p class="section-tag">✦ Why Food Fusion</p>
+        <h2 class="section-title">Packed with Premium Features</h2>
+        <p class="section-subtitle">Everything you need for a world-class food delivery experience — built for pleasure, speed, and savings.</p>
+
+        <div class="features-grid">
+            <div class="feature-card" style="--glow-color: rgba(245,158,11,0.08);">
+                <div class="feature-icon" style="background: rgba(245,158,11,0.15);"><i class="fa-solid fa-trophy"></i></div>
+                <h3>Loyalty Rewards System</h3>
+                <p>Earn points on every order. Climb through Silver, Gold, and Platinum tiers to unlock exclusive discounts and perks.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(99,102,241,0.08);">
+                <div class="feature-icon" style="background: rgba(99,102,241,0.15);"><i class="fa-solid fa-motorcycle"></i></div>
+                <h3>Live Order Tracking</h3>
+                <p>Watch your order move through the kitchen, get picked up, and arrive at your door — with a real-time animated timeline.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(16,185,129,0.08);">
+                <div class="feature-icon" style="background: rgba(16,185,129,0.15);"><i class="fa-solid fa-users"></i></div>
+                <h3>Group Ordering Lobby</h3>
+                <p>Planning a team lunch? Create a group lobby, share the code with friends, and everyone adds their own items to a shared cart.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(244,63,94,0.08);">
+                <div class="feature-icon" style="background: rgba(244,63,94,0.15);"><i class="fa-solid fa-dice"></i></div>
+                <h3>Spin & Win Rewards</h3>
+                <p>Spin the wheel before every order for a chance to win free meals, cashback, or exclusive promo codes. Every spin counts!</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(245,158,11,0.08);">
+                <div class="feature-icon" style="background: rgba(245,158,11,0.15);"><i class="fa-solid fa-leaf"></i></div>
+                <h3>Eco-Friendly Packaging</h3>
+                <p>Choose sustainable packaging at checkout. Reduce your carbon footprint while still enjoying your favourite meals guilt-free.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(99,102,241,0.08);">
+                <div class="feature-icon" style="background: rgba(99,102,241,0.15);"><i class="fa-solid fa-gift"></i></div>
+                <h3>Gift Your Order</h3>
+                <p>Surprise a friend or family member! Send a food order with a personalized message — the perfect edible gift for any occasion.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(16,185,129,0.08);">
+                <div class="feature-icon" style="background: rgba(16,185,129,0.15);"><i class="fa-solid fa-file-invoice"></i></div>
+                <h3>PDF Invoice Downloads</h3>
+                <p>Every order comes with a professionally generated PDF invoice — perfect for expense tracking and corporate reimbursements.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(244,63,94,0.08);">
+                <div class="feature-icon" style="background: rgba(244,63,94,0.15);"><i class="fa-solid fa-comments"></i></div>
+                <h3>Live Restaurant Chat</h3>
+                <p>Message the restaurant directly from the tracking page. Need extra sauce? Running late? Just type it in — they'll see it instantly.</p>
+            </div>
+            <div class="feature-card" style="--glow-color: rgba(245,158,11,0.08);">
+                <div class="feature-icon" style="background: rgba(245,158,11,0.15);"><i class="fa-solid fa-bullseye"></i></div>
+                <h3>Food Challenges</h3>
+                <p>Complete weekly eating challenges — order 3 new cuisines, try 5 different restaurants — and earn bonus loyalty points as rewards.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ CUISINES ═══════ -->
+    <section style="padding-top: 20px;">
+        <p class="section-tag">✦ Explore Cuisines</p>
+        <h2 class="section-title">Every Craving, Covered</h2>
+        <p class="section-subtitle" style="margin-bottom: 36px;">From spicy street food to fine continental dining — we've got 18+ cuisine categories waiting for you.</p>
+        <div class="cuisines-scroll">
+            <div class="cuisine-pill"><i class="fa-solid fa-bowl-food"></i> North Indian</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-bowl-rice"></i> South Indian</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-box"></i> Chinese</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-pizza-slice"></i> Italian / Pizza</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-burger"></i> Mexican</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-burger"></i> Fast Food</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-bowl-rice"></i> Biryani</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-fish"></i> Seafood</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-drumstick-bite"></i> Mughlai</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-bowl-food"></i> Thai</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-box"></i> Japanese</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-carrot"></i> Continental</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-ice-cream"></i> Bakery & Desserts</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-mug-hot"></i> Beverages & Juices</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-hotdog"></i> Street Food</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-seedling"></i> Vegan</div>
+            <div class="cuisine-pill"><i class="fa-solid fa-carrot"></i> Healthy & Salads</div>
+        </div>
+    </section>
+
+    <!-- ═══════ HOW IT WORKS ═══════ -->
+    <section>
+        <p class="section-tag">✦ How It Works</p>
+        <h2 class="section-title">Order in 4 Simple Steps</h2>
+        <p class="section-subtitle">From craving to doorstep in minutes. No hassle, no waiting.</p>
+
+        <div class="steps-row">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h3>Create Your Account</h3>
+                <p>Sign up for free in 30 seconds. No credit card required. Instantly access 75+ restaurants.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h3>Explore & Browse</h3>
+                <p>Filter by cuisine, budget, delivery speed, or rating. Let Surprise Me pick for you!</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h3>Customize & Checkout</h3>
+                <p>Choose eco packaging, apply coupons, add a tip for your driver, and pay your way — COD, UPI, or Card.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">4</div>
+                <h3>Track & Enjoy</h3>
+                <p>Watch your order in real-time, chat with the restaurant, and earn loyalty points on every delivery.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ TESTIMONIALS ═══════ -->
+    <section style="padding-top: 20px;">
+        <p class="section-tag">✦ What People Say</p>
+        <h2 class="section-title">Loved by Foodies Everywhere</h2>
+        <p class="section-subtitle" style="margin-bottom: 48px;">Real reviews from real customers who order with Food Fusion every day.</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"The group ordering lobby is a game-changer for our office lunches. Everyone adds their own items and we checkout once. Absolutely brilliant feature!"</p>
+                <div class="reviewer">
+                    <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">R</div>
+                    <div>
+                        <div class="reviewer-name">Riya Sharma</div>
+                        <div class="reviewer-role">Product Manager, Bangalore</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"I love the Spin & Win feature — I've won free meals twice this month! The loyalty points system keeps me coming back. Best food app I've ever used."</p>
+                <div class="reviewer">
+                    <div class="avatar" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">A</div>
+                    <div>
+                        <div class="reviewer-name">Arjun Mehta</div>
+                        <div class="reviewer-role">Software Engineer, Pune</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"The live chat with the restaurant feature saved me once when I forgot to mention my allergy. The driver also arrived in 22 minutes. Truly premium!"</p>
+                <div class="reviewer">
+                    <div class="avatar" style="background: linear-gradient(135deg, #10b981, #059669);">P</div>
+                    <div>
+                        <div class="reviewer-name">Priya Nair</div>
+                        <div class="reviewer-role">Doctor, Chennai</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ CTA BANNER ═══════ -->
+    <div class="cta-section">
+        <p class="section-tag" style="color: var(--amber); margin-bottom: 16px;">✦ Ready to Order?</p>
+        <h2>Your First Meal Awaits <i class="fa-solid fa-utensils"></i></h2>
+        <p>Join thousands of food lovers who chose Food Fusion for speed, quality, and rewards. Sign up free and start ordering in minutes.</p>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+            <a href="/app#/register" class="btn btn-primary btn-large pulse">
+                <i class="fa-solid fa-user-plus"></i> Create Free Account
+            </a>
+            <a href="/app" class="btn btn-outline btn-large">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </a>
+        </div>
+    </div>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo" style="margin-bottom:4px;">
+                    <i class="fa-solid fa-utensils"></i> Food Fusion
+                </div>
+                <p>India's most premium food delivery platform. Fast, rewarding, and always delicious.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Cuisines</a>
+                <a href="#">Restaurants</a>
+            </div>
+            <div class="footer-col">
+                <h4>For Partners</h4>
+                <a href="/app#/register">Register Restaurant</a>
+                <a href="/app#/register">Become a Driver</a>
+                <a href="#">Partner Portal</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2025 Food Fusion. All rights reserved.</span>
+            <span>Made with ❤️ &amp; <i class="fa-solid fa-pizza-slice"></i> in India</span>
+        </div>
+    </footer>
+
+</body>
+</html>
