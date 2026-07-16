@@ -115,7 +115,8 @@ public class OrderController {
                     "status", order.getStatus(),
                     "estimatedDeliveryTime", estimatedTime.toString().substring(11, 16),
                     "timeline", order.getTrackingTimeline(),
-                    "deliveryPartner", order.getDeliveryPartner() != null ? order.getDeliveryPartner().getUsername() : "Assigning..."
+                    "deliveryPartner", order.getDeliveryPartner() != null ? order.getDeliveryPartner().getUsername() : "Assigning...",
+                    "deliveryOtp", order.getDeliveryOtp() != null ? order.getDeliveryOtp() : ""
             );
             return ResponseEntity.ok(trackingData);
         } catch (Exception e) {

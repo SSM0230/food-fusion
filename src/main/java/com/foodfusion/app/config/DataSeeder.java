@@ -188,6 +188,7 @@ public class DataSeeder implements CommandLineRunner {
             .paymentMethod("CARD")
             .paid(true)
             .deliveryPartner(delivery1)
+            .deliveryOtp(1234)
             .trackingTimeline("Placed (13:00) | Restaurant Accepted (13:05) | Preparing (13:10) | Packed (13:20) | Picked Up (13:25) | Delivered (13:40)")
             .build();
         o1 = orderRepository.save(o1);
@@ -207,6 +208,7 @@ public class DataSeeder implements CommandLineRunner {
             .paymentMethod("UPI")
             .paid(true)
             .deliveryPartner(delivery2)
+            .deliveryOtp(5678)
             .trackingTimeline("Placed (19:30) | Restaurant Accepted (19:35) | Preparing (19:40) | Packed (19:52) | Picked Up (19:58) | Delivered (20:15)")
             .build();
         o2 = orderRepository.save(o2);

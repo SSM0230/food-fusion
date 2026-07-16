@@ -5,10 +5,19 @@ import com.foodfusion.app.dto.RegisterRequest;
 import com.foodfusion.app.entity.Address;
 import com.foodfusion.app.entity.User;
 import com.foodfusion.app.service.UserService;
+import com.foodfusion.app.service.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,6 +28,12 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private SecurityContextRepository securityContextRepository;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -37,12 +52,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request,
+                                   HttpServletRequest httpRequest,
+                                   HttpServletResponse httpResponse,
+                                   HttpSession session) {
         try {
-            User user = userService.login(request.getUsername(), request.getPassword());
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+            securityContextRepository.saveContext(context, httpRequest, httpResponse);
+
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetails.getUser();
+
             session.setAttribute("userId", user.getId());
             session.setAttribute("username", user.getUsername());
             session.setAttribute("role", user.getRole());
+
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));

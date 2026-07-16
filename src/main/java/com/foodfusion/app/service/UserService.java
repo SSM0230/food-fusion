@@ -5,6 +5,7 @@ import com.foodfusion.app.entity.User;
 import com.foodfusion.app.repository.AddressRepository;
 import com.foodfusion.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +22,16 @@ public class UserService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User register(String username, String password, String email, String role, LocalDate birthday) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         User user = User.builder()
                 .username(username)
-                .password(password) // Note: In production, password should be hashed (e.g. BCrypt)
+                .password(passwordEncoder.encode(password))
                 .email(email)
                 .role(role.toUpperCase())
                 .birthday(birthday)
@@ -43,7 +47,7 @@ public class UserService {
         if (!user.isActive()) {
             throw new RuntimeException("Account is disabled by administrator.");
         }
-        if (!user.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
         return user;
@@ -63,10 +67,10 @@ public class UserService {
 
     public User changePassword(Long userId, String oldPassword, String newPassword) {
         User user = getUserById(userId);
-        if (!user.getPassword().equals(oldPassword)) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new RuntimeException("Incorrect old password");
         }
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
         return userRepository.save(user);
     }
 

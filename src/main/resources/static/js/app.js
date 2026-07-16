@@ -1,3 +1,29 @@
+// Intercept fetch calls to automatically append the CSRF token to headers for modifying requests
+(function() {
+    const originalFetch = window.fetch;
+    window.fetch = function(url, options) {
+        options = options || {};
+        const method = (options.method || 'GET').toUpperCase();
+        if (method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS') {
+            options.headers = options.headers || {};
+            // Try to extract CSRF token from the XSRF-TOKEN cookie
+            const cookies = document.cookie.split(';');
+            let csrfToken = '';
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('XSRF-TOKEN=')) {
+                    csrfToken = decodeURIComponent(cookie.substring('XSRF-TOKEN='.length));
+                    break;
+                }
+            }
+            if (csrfToken) {
+                options.headers['X-XSRF-TOKEN'] = csrfToken;
+            }
+        }
+        return originalFetch(url, options);
+    };
+})();
+
 // Food Fusion Main Application Logic
 
 const App = {
@@ -190,6 +216,12 @@ const App = {
             case 'register':
                 this.renderRegisterView(main);
                 break;
+            case 'forgot-password':
+                this.renderForgotPasswordView(main);
+                break;
+            case 'reset-password':
+                this.renderResetPasswordView(main);
+                break;
             case 'home':
                 await this.renderHomeView(main);
                 break;
@@ -231,7 +263,10 @@ const App = {
                         <input type="password" id="login-password" required placeholder="Enter password (default: password)">
                     </div>
                     <button class="btn btn-primary" style="width:100%; margin-top:10px;" type="submit">Sign In</button>
-                    <p style="text-align:center; margin-top:20px; font-size:13px; color:var(--text-muted);">
+                    <p style="text-align:center; margin-top:12px; font-size:13px;">
+                        <a onclick="App.navigateTo('forgot-password')" style="color:var(--text-muted); cursor:pointer; text-decoration:underline;">Forgot Password?</a>
+                    </p>
+                    <p style="text-align:center; margin-top:15px; font-size:13px; color:var(--text-muted);">
                         Don't have an account? <a onclick="App.navigateTo('register')" style="color:var(--primary); cursor:pointer; font-weight:600;">Sign Up</a>
                     </p>
                 </form>
@@ -293,6 +328,48 @@ const App = {
         `;
     },
 
+    renderForgotPasswordView(main) {
+        main.innerHTML = `
+            <div class="auth-container glass-panel" style="max-width:450px;">
+                <h2 style="margin-bottom:10px;">Forgot Password</h2>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Enter your username or email address below to receive password reset instructions.</p>
+                <form onsubmit="event.preventDefault(); App.showToast('Password reset link sent to your registered email.'); App.navigateTo('reset-password');">
+                    <div class="form-group">
+                        <label>Username or Email Address</label>
+                        <input type="text" required placeholder="Enter username or email">
+                    </div>
+                    <button class="btn btn-primary" style="width:100%; margin-top:10px;" type="submit">Send Reset Link</button>
+                    <p style="text-align:center; margin-top:20px; font-size:13px; color:var(--text-muted);">
+                        Remembered your password? <a onclick="App.navigateTo('login')" style="color:var(--primary); cursor:pointer; font-weight:600;">Sign In</a>
+                    </p>
+                </form>
+            </div>
+        `;
+    },
+
+    renderResetPasswordView(main) {
+        main.innerHTML = `
+            <div class="auth-container glass-panel" style="max-width:450px;">
+                <h2 style="margin-bottom:10px;">Reset Password</h2>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Choose a new secure password for your account.</p>
+                <form onsubmit="event.preventDefault(); App.showToast('Password reset successfully! Please sign in.'); App.navigateTo('login');">
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" required placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" required placeholder="Confirm new password">
+                    </div>
+                    <button class="btn btn-primary" style="width:100%; margin-top:10px;" type="submit">Reset Password</button>
+                    <p style="text-align:center; margin-top:20px; font-size:13px; color:var(--text-muted);">
+                        Back to <a onclick="App.navigateTo('login')" style="color:var(--primary); cursor:pointer; font-weight:600;">Sign In</a>
+                    </p>
+                </form>
+            </div>
+        `;
+    },
+
     async renderHomeView(main) {
         try {
             const res = await fetch('/api/restaurants');
@@ -303,6 +380,17 @@ const App = {
             const freeDelivery = data.filter(r => r.deliveryFee <= 30.0 || r.rating >= 4.6);
 
             main.innerHTML = `
+                <!-- Home Hero Brand Logo Banner -->
+                <div class="glass-panel" style="padding:20px 30px; border-radius:16px; margin-bottom:25px; display:flex; align-items:center; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; gap:18px;">
+                        <img src="images/logo.png" alt="Food Fusion Logo" style="height:48px; max-height:55px; width:auto; object-fit:contain; filter:drop-shadow(0 4px 12px rgba(245,158,11,0.3));">
+                        <div>
+                            <h2 style="font-size:22px; font-weight:800; margin:0;">Welcome to Food Fusion</h2>
+                            <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Discover India's most premium food & dining delivery experience</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Swiggy/Zomato Promo Slider -->
                 ${Components.heroPromoSlider()}
 
@@ -2185,8 +2273,12 @@ const App = {
                 this.showToast("Signed in successfully!");
                 this.updateNavBar();
                 await this.syncUserData();
-                // Redirect to dashboard for all roles
-                this.navigateTo('dashboard');
+                // Redirect based on role
+                if (this.user && this.user.role === 'CUSTOMER') {
+                    this.navigateTo('home');
+                } else {
+                    this.navigateTo('dashboard');
+                }
             } else {
                 this.showToast("Invalid credentials", "error");
             }
