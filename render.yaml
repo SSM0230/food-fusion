@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: foodfusion-backend
+    runtime: docker
+    plan: free
+
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-d9d20ugk1i2s73cqiafg-a.singapore-postgres.render.com:5432/foodfusion_db?sslmode=require
+
+      - key: SPRING_DATASOURCE_USERNAME
+        value: foodfusion_db_user
+
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: Ju4cWzWWTOz5w4gpeXs3uL9DxwbiDg3A
+
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+
+      - key: SPRING_JPA_DATABASE_PLATFORM
+        value: org.hibernate.dialect.PostgreSQLDialect
+
+      - key: SERVER_PORT
+        value: 8080
