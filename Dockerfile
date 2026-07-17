@@ -1,14 +1,23 @@
-# Use Java 21
-FROM eclipse-temurin:21-jdk
+# Build stage
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy the built JAR file
-COPY target/*.jar app.jar
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+COPY src src
 
-# Expose the port
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
+
+# Runtime stage
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the application
 ENTRYPOINT ["java","-jar","app.jar"]
